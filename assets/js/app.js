@@ -1,6 +1,17 @@
 const mario = document.querySelector('#avatar');
 const coin = document.querySelector('#coin');
 
+function isTouching(a, b) {
+  const aRect = a.getBoundingClientRect();
+  const bRect = b.getBoundingClientRect();
+  return !(
+    aRect.top + aRect.height < bRect.top ||
+    aRect.top > bRect.top + bRect.height ||
+    aRect.left + aRect.width < bRect.left ||
+    aRect.left > bRect.left + bRect.width
+  );
+}
+
 let score = 0;
 
 const body = document.querySelector('body');
@@ -46,16 +57,19 @@ const isMoving = (e) => {
   mario.style.left = x + 'px';
   mario.style.top = y + 'px';
 
-    if(y + clientRectMario.height > coinY && y < coinY + clientRectCoin.height && x + clientRectMario.width > coinX && x < coinX + clientRectCoin.width){
-      score += 1;
-      coinX = Math.floor(Math.random() * (screen.width - clientRectCoin.width));
-      coinY = Math.floor(Math.random() * (screen.height - clientRectCoin.height));
-      coin.style.left = coinX + 'px';
-      coin.style.top = coinY + 'px';
-    }
+  if(isTouching(mario, coin)){
+  score++;
+  coinX = Math.floor(Math.random() * (window.innerWidth - clientRectCoin.width));
+  coinY = Math.floor(Math.random() * (window.innerHeight - clientRectCoin.height));
+  coin.style.left = coinX + 'px';
+  coin.style.top = coinY + 'px';
+  
+}
 
   header.innerHTML = `Score: ${score}`
 }
 
 window.addEventListener('keydown', isMoving);
+
+
 
